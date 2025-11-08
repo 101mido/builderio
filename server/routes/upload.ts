@@ -38,19 +38,15 @@ export const handleUpload: RequestHandler = async (req, res) => {
       } as UploadResponse);
     }
 
-    // Get uploaded files
-    const files = req.files as
-      | { [fieldname: string]: Express.Multer.File[] }
-      | undefined;
+    // Get uploaded files - multer stores them in req.files as an array when using .any()
+    const uploadedFiles = (req.files as Express.Multer.File[]) || [];
 
-    if (!files || !files.files) {
+    if (uploadedFiles.length === 0) {
       return res.status(400).json({
         success: false,
         message: "No files uploaded",
       } as UploadResponse);
     }
-
-    const uploadedFiles = files.files;
 
     // In a real implementation, you would:
     // 1. Process each file according to the payload
@@ -64,6 +60,7 @@ export const handleUpload: RequestHandler = async (req, res) => {
     console.log("Files count:", uploadedFiles.length);
     console.log("Audio entries:", payload.audios_list.length);
     console.log("Webhooks:", payload.audios_list.map((a) => a.webhook));
+    console.log("Scoring metrics configured:", payload.audios_list[0]?.scoring_metrics.length || 0);
 
     // For now, just acknowledge successful reception
     const response: UploadResponse = {
