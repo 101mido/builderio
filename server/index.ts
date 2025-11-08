@@ -1,7 +1,17 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import multer from "multer";
 import { handleDemo } from "./routes/demo";
+import { handleUpload } from "./routes/upload";
+
+// Configure multer for file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 500 * 1024 * 1024, // 500MB limit
+  },
+});
 
 export function createServer() {
   const app = express();
@@ -18,6 +28,9 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Upload endpoint
+  app.post("/api/upload", upload.any(), handleUpload);
 
   return app;
 }
