@@ -93,6 +93,22 @@ export default function ConfigPanel({
                 Destination directory path for processed files
               </p>
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                API Processing Endpoint
+              </label>
+              <input
+                type="url"
+                value={apiEndpoint}
+                onChange={(e) => onApiEndpointChange(e.target.value)}
+                placeholder="https://api.example.com/process"
+                className="input-field w-full"
+              />
+              <p className="text-xs text-muted-foreground mt-2">
+                API endpoint URL that will receive the audio processing payload
+              </p>
+            </div>
           </div>
         )}
       </div>
