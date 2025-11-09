@@ -4,9 +4,11 @@ import { ChevronDown, Plus, Trash2 } from "lucide-react";
 interface ConfigPanelProps {
   source: string;
   destination: string;
+  apiEndpoint: string;
   webhooks: Array<{ index: number; url: string }>;
   onSourceChange: (value: string) => void;
   onDestinationChange: (value: string) => void;
+  onApiEndpointChange: (value: string) => void;
   onWebhookAdd: () => void;
   onWebhookChange: (index: number, value: string) => void;
   onWebhookRemove: (index: number) => void;
@@ -15,9 +17,11 @@ interface ConfigPanelProps {
 export default function ConfigPanel({
   source,
   destination,
+  apiEndpoint,
   webhooks,
   onSourceChange,
   onDestinationChange,
+  onApiEndpointChange,
   onWebhookAdd,
   onWebhookChange,
   onWebhookRemove,
