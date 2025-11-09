@@ -30,6 +30,13 @@ export default function FilesList({ tenantName, onFileSelect }: FilesListProps) 
     try {
       setIsLoading(true);
       const response = await fetch(`/api/files?tenant_name=${tenantName}`);
+
+      if (!response.ok) {
+        setError(`Failed to load files: ${response.status}`);
+        setFiles([]);
+        return;
+      }
+
       const data = await response.json();
 
       if (data.success) {
