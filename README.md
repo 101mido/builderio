@@ -1,149 +1,197 @@
-# Fusion Starter - Audio Processor Application
+# Fusion Starter
 
-A full-stack web application for multi-tenant audio file processing and transcription management.
+A modern, full-stack audio processing application with multi-tenant architecture.
+
+## Overview
+
+Fusion Starter is a web application designed for audio file upload, processing, and transcription management. Built with React and FastAPI, it provides a scalable solution for managing audio workflows across multiple tenants.
 
 ## Tech Stack
 
-- **Frontend**: React 18 + TypeScript + Vite
-- **Backend**: FastAPI (Python)
-- **UI**: TailwindCSS + Radix UI (shadcn/ui)
+### Frontend
+
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite 7
+- **Styling**: TailwindCSS 3 + Radix UI (shadcn/ui)
+- **State Management**: TanStack React Query
+- **Routing**: React Router 6
+
+### Backend
+
+- **Framework**: FastAPI
+- **Server**: Uvicorn with auto-reload
+- **Validation**: Pydantic
 - **Storage**: File-based JSON
 
 ## Prerequisites
 
-- **Node.js** 18+ and **pnpm** 10.14.0+
-- **Python** 3.9+ (Python 3.11 recommended)
-- **Git**
+- Node.js 18+ and pnpm 10.14.0+
+- Python 3.9+ (Python 3.11 recommended)
+- Git
 
-## Quick Start
+## Getting Started
 
-### 1. Clone and Install Dependencies
+### 1. Install Dependencies
 
 ```bash
 # Install Node.js dependencies
 pnpm install
 
-# Setup Python environment and install backend dependencies
+# Setup Python environment
 pnpm setup:python
-# Or manually:
-# bash setup-python.sh (Linux/Mac)
-# setup-python.bat (Windows)
 ```
 
-### 2. Configure Environment
+On Windows, the Python setup script will run automatically. On Linux/Mac, you may need to make it executable first:
 
 ```bash
-# Copy the example environment file
+chmod +x setup-python.sh
+bash setup-python.sh
+```
+
+### 2. Environment Configuration
+
+Copy the example environment file and configure as needed:
+
+```bash
 cp .env.example .env
-
-# Edit .env with your configuration
-# Add your Builder.io API key if needed
 ```
 
-### 3. Run the Application
+Key environment variables:
 
-You need to run both the frontend and backend servers:
+- `API_PORT` - Backend API port (default: 8000)
+- `API_HOST` - Backend host (default: 0.0.0.0)
+- `PING_MESSAGE` - Custom ping response message
+- `VITE_PUBLIC_BUILDER_KEY` - Builder.io API key (optional)
 
-**Terminal 1 - Backend (FastAPI):**
+### 3. Start Development Servers
+
+**Option A: Run both servers separately (recommended for development)**
+
+Terminal 1 - Backend:
+
 ```bash
-# Activate Python virtual environment
-source venv/bin/activate  # Linux/Mac
-# or
-venv\Scripts\activate.bat  # Windows
-
-# Start the FastAPI server (runs on http://localhost:8000)
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pnpm dev:api
 ```
 
-**Terminal 2 - Frontend (Vite):**
+Terminal 2 - Frontend:
+
 ```bash
-# Start the Vite dev server (runs on http://localhost:8080)
 pnpm dev
 ```
 
-Now open http://localhost:8080 in your browser.
+**Option B: Run frontend only (requires backend already built)**
 
-## Development
+```bash
+pnpm build     # Build once
+pnpm dev       # Frontend will proxy to backend
+```
 
-### Available Scripts
+### 4. Access the Application
 
-- `pnpm dev` - Start Vite dev server (frontend)
-- `pnpm dev:api` - Start FastAPI server (backend)
-- `pnpm setup:python` - Setup Python virtual environment
-- `pnpm build` - Build for production
-- `pnpm preview` - Preview production build
-- `pnpm test` - Run tests
-- `pnpm typecheck` - Run TypeScript type checking
-- `pnpm format.fix` - Format code with Prettier
+- **Frontend**: http://localhost:8080
+- **API Documentation**: http://localhost:8000/docs (Swagger UI)
+- **API Alternative Docs**: http://localhost:8000/redoc
 
-### API Documentation
-
-When the FastAPI server is running, you can access:
-
-- **Interactive API docs**: http://localhost:8000/docs (Swagger UI)
-- **Alternative API docs**: http://localhost:8000/redoc (ReDoc)
-
-### Project Structure
+## Project Structure
 
 ```
-├── backend/              # FastAPI backend
-│   ├── main.py          # Main FastAPI application
-│   ├── run.py           # Server startup script
-│   └── requirements.txt # Python dependencies
-├── client/              # React frontend
-│   ├── components/      # React components
-│   ├── hooks/          # Custom hooks
-│   ├── lib/            # Utility functions
-│   ├── pages/          # Page components
-│   └── App.tsx         # Main app component
-├── shared/             # Shared TypeScript types
-├── data/               # Application data (gitignored)
-├── venv/               # Python virtual environment (gitignored)
-└── dist/               # Build output (gitignored)
+fusion-starter/
+├── backend/                 # FastAPI backend
+│   ├── main.py             # Main application & routes
+│   ├── run.py              # Development server script
+│   └── requirements.txt    # Python dependencies
+│
+├── client/                  # React frontend
+│   ├── components/         # React components
+│   │   └── ui/            # Radix UI components (49 components)
+│   ├── hooks/             # Custom React hooks
+│   ├── lib/               # Utility functions
+│   ├── pages/             # Page components
+│   └── App.tsx            # Application entry point
+│
+├── shared/                 # Shared TypeScript types
+│   └── api.ts             # API interfaces
+│
+├── public/                # Static assets
+├── venv/                  # Python virtual environment (gitignored)
+├── data/                  # Application data (gitignored)
+│   ├── tenants.json       # Tenant information
+│   └── configs.json       # Tenant configurations
+│
+└── dist/                  # Build output (gitignored)
+    └── spa/               # Production frontend build
 ```
 
 ## API Endpoints
 
-All endpoints are prefixed with `/api/`:
+All endpoints are prefixed with `/api`:
 
-### Health & Demo
+### Health & Status
+
 - `GET /api/health` - Health check
-- `GET /api/ping` - Ping endpoint
+- `GET /api/ping` - Ping endpoint with custom message
 - `GET /api/demo` - Demo endpoint
 
 ### Tenant Management
+
 - `GET /api/tenants` - List all tenants
-- `POST /api/tenants` - Create new tenant
-- `GET /api/tenants/:name/config` - Get tenant configuration
-- `POST /api/tenants/:name/config` - Update tenant configuration
+- `POST /api/tenants` - Create a new tenant
+  ```json
+  { "name": "tenant_name" }
+  ```
+- `GET /api/tenants/{name}/config` - Get tenant configuration
+- `POST /api/tenants/{name}/config` - Update tenant configuration
 
-### File Management
-- `GET /api/files?tenant_name=X` - List audio files
-- `GET /api/files/:baseName/vtt` - Get VTT transcription
-- `GET /api/files/:baseName/json` - Get JSON transcription
-- `GET /api/files/:baseName/audio` - Get audio file
-- `POST /api/upload` - Upload audio files
+### File Operations
 
-## Configuration
+- `GET /api/files?tenant_name={name}` - List audio files for tenant
+- `GET /api/files/{baseName}/vtt` - Download VTT transcription
+- `GET /api/files/{baseName}/json` - Download JSON transcription
+- `GET /api/files/{baseName}/audio` - Download audio file
+- `POST /api/upload` - Upload audio files (multipart/form-data)
 
-### Environment Variables
+## Features
 
-See `.env.example` for all available configuration options:
+### Multi-Tenant Architecture
 
-- `VITE_PUBLIC_BUILDER_KEY` - Builder.io API key
-- `PING_MESSAGE` - Custom ping message
-- `API_HOST` - FastAPI server host (default: 0.0.0.0)
-- `API_PORT` - FastAPI server port (default: 8000)
-- `API_RELOAD` - Enable auto-reload (default: true)
+- Isolated configurations per tenant
+- Custom source/destination directories
+- Individual webhook configurations
+- Per-tenant scoring metrics
 
-### Multi-tenant Setup
+### Audio File Management
 
-Each tenant can have custom configuration:
-- Source directory for audio files
-- Destination directory for transcriptions
-- API endpoint for processing
-- Webhook URLs for notifications
-- Scoring metrics
+- Drag-and-drop file upload
+- Support for WAV, MP3, M4A, FLAC formats
+- Automatic transcription status tracking
+- File size limit: 500MB
+
+### Transcription Support
+
+- VTT format for video players
+- JSON format for programmatic access
+- Automatic file association
+
+### Developer Experience
+
+- Auto-generated API documentation
+- Hot reload in development
+- TypeScript type safety
+- Modern React patterns with hooks
+
+## Development Scripts
+
+```bash
+pnpm dev           # Start Vite dev server (port 8080)
+pnpm dev:api       # Start FastAPI server (port 8000)
+pnpm setup:python  # Setup Python virtual environment
+pnpm build         # Build for production
+pnpm preview       # Preview production build
+pnpm test          # Run tests
+pnpm typecheck     # TypeScript type checking
+pnpm format.fix    # Format code with Prettier
+```
 
 ## Building for Production
 
@@ -151,68 +199,84 @@ Each tenant can have custom configuration:
 # Build the frontend
 pnpm build
 
-# The output will be in dist/spa/
-# Serve with FastAPI or any static file server
-```
-
-To run the production build:
-
-```bash
-# Start FastAPI with production settings
+# Start the production server
 cd backend
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-The FastAPI app will automatically serve the static frontend from `dist/spa/`.
+The FastAPI server will automatically serve the built frontend from `dist/spa/`.
+
+## Configuration
+
+### Tenant Configuration Schema
+
+Each tenant can be configured with:
+
+```typescript
+{
+  source: string; // Audio source directory
+  destination: string; // Transcription output directory
+  api_endpoint: string; // Processing API URL
+  webhooks: Array<{
+    // Webhook notifications
+    index: number;
+    url: string;
+  }>;
+  metrics: Array<{
+    // Scoring metrics
+    call_type: string;
+    rating_type: number;
+    metrics: Array<{
+      title: string;
+      description: string;
+    }>;
+  }>;
+}
+```
 
 ## Troubleshooting
 
-### Python virtual environment issues
+### Port Already in Use
 
-If you encounter issues with the Python virtual environment:
-
-```bash
-# Remove the existing venv
-rm -rf venv
-
-# Re-run the setup
-pnpm setup:python
-```
-
-### Port already in use
-
-If port 8000 or 8080 is already in use:
+If ports 8000 or 8080 are occupied:
 
 ```bash
-# Change the port in .env
-API_PORT=8001  # For backend
-# or
-# Use a different port when starting Vite
+# Change backend port
+API_PORT=8001 pnpm dev:api
+
+# Change frontend port
 pnpm dev --port 8081
 ```
 
-### Module not found errors
-
-Make sure you've installed all dependencies:
+### Python Virtual Environment Issues
 
 ```bash
-# Node.js dependencies
-pnpm install
+# Remove and recreate
+rm -rf venv
+pnpm setup:python
+```
 
-# Python dependencies (with venv activated)
+### Module Not Found Errors
+
+```bash
+# Reinstall dependencies
+pnpm install
 pip install -r backend/requirements.txt
 ```
 
-## Features
+## Technology Highlights
 
-- Multi-tenant architecture
-- Audio file upload with drag-and-drop
-- Transcription file management (VTT, JSON)
-- Configurable webhooks and scoring metrics
-- Auto-generated API documentation
-- Dark mode support
-- Responsive design
+- **Vite**: Lightning-fast development with HMR
+- **FastAPI**: Modern Python web framework with automatic OpenAPI docs
+- **Pydantic**: Data validation using Python type annotations
+- **Radix UI**: Accessible, unstyled component primitives
+- **TailwindCSS**: Utility-first CSS framework
+- **React Query**: Powerful data synchronization for React
 
 ## License
 
-Private project
+Private
+
+## Contributing
+
+This is a private project. For questions or issues, contact the maintainer.

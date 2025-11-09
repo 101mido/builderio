@@ -53,7 +53,7 @@ export default function FileUploadZone({
     setIsDragging(false);
 
     const droppedFiles = Array.from(e.dataTransfer.files).filter((file) =>
-      file.type.startsWith("audio/")
+      file.type.startsWith("audio/"),
     );
 
     if (droppedFiles.length > 0) {

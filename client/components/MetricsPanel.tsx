@@ -22,7 +22,9 @@ export default function MetricsPanel({
   metrics,
   onMetricsChange,
 }: MetricsPanelProps) {
-  const [expandedMetrics, setExpandedMetrics] = useState<{ [key: string]: boolean }>({});
+  const [expandedMetrics, setExpandedMetrics] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   const addMetric = () => {
     const newMetric: ScoringMetric = {
@@ -46,7 +48,7 @@ export default function MetricsPanel({
 
   const updateMetric = (id: string, updates: Partial<ScoringMetric>) => {
     onMetricsChange(
-      metrics.map((m) => (m.id === id ? { ...m, ...updates } : m))
+      metrics.map((m) => (m.id === id ? { ...m, ...updates } : m)),
     );
   };
 
@@ -63,7 +65,7 @@ export default function MetricsPanel({
     metricId: string,
     itemIndex: number,
     field: "title" | "description",
-    value: string
+    value: string,
   ) => {
     const metric = metrics.find((m) => m.id === metricId);
     if (metric) {
@@ -203,7 +205,10 @@ export default function MetricsPanel({
 
                   <div className="space-y-3">
                     {metric.metrics.map((item, itemIndex) => (
-                      <div key={itemIndex} className="p-3 bg-secondary bg-opacity-20 rounded-lg space-y-2">
+                      <div
+                        key={itemIndex}
+                        className="p-3 bg-secondary bg-opacity-20 rounded-lg space-y-2"
+                      >
                         <input
                           type="text"
                           value={item.title}
@@ -212,7 +217,7 @@ export default function MetricsPanel({
                               metric.id,
                               itemIndex,
                               "title",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           placeholder="Metric title (e.g., Call Opening)"
@@ -225,7 +230,7 @@ export default function MetricsPanel({
                               metric.id,
                               itemIndex,
                               "description",
-                              e.target.value
+                              e.target.value,
                             )
                           }
                           placeholder="Metric description..."
@@ -234,7 +239,9 @@ export default function MetricsPanel({
                         />
                         <div className="flex justify-end">
                           <button
-                            onClick={() => removeMetricItem(metric.id, itemIndex)}
+                            onClick={() =>
+                              removeMetricItem(metric.id, itemIndex)
+                            }
                             className="p-1.5 hover:bg-destructive hover:bg-opacity-10 rounded transition-colors text-muted-foreground hover:text-destructive"
                             type="button"
                             title="Remove metric"
