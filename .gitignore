@@ -25,3 +25,20 @@ dist-ssr
 
 .config/
 !.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Application data
+data/

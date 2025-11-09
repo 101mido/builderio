@@ -5,11 +5,15 @@ from pathlib import Path
 from typing import List, Optional
 from datetime import datetime
 
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Query
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -312,6 +316,19 @@ async def get_audio_file(base_name: str, tenant_name: str = "default"):
 @app.get("/api/health")
 async def health_check():
     return {"status": "healthy"}
+
+
+# Ping endpoint (matches Express implementation)
+@app.get("/api/ping")
+async def ping():
+    ping_message = os.getenv("PING_MESSAGE", "ping")
+    return {"message": ping_message}
+
+
+# Demo endpoint (matches Express implementation)
+@app.get("/api/demo")
+async def demo():
+    return {"message": "Hello from FastAPI server"}
 
 
 # Serve React SPA
