@@ -151,7 +151,9 @@ export default function ConfigPanel({
                   <input
                     type="url"
                     value={webhook.url}
-                    onChange={(e) => onWebhookChange(webhook.index, e.target.value)}
+                    onChange={(e) =>
+                      onWebhookChange(webhook.index, e.target.value)
+                    }
                     placeholder="https://example.com/webhook"
                     className="input-field w-full text-sm"
                   />

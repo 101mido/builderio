@@ -161,7 +161,8 @@ export function createServer() {
         source: "/cc1_recordings",
       };
 
-      const destination = (tenantConfig.destination || "/cc1_transcriptions") as string;
+      const destination = (tenantConfig.destination ||
+        "/cc1_transcriptions") as string;
       const source = (tenantConfig.source || "/cc1_recordings") as string;
 
       const filesInfo = [];
@@ -212,7 +213,8 @@ export function createServer() {
         success: true,
         files: filesInfo.sort(
           (a, b) =>
-            new Date(b.uploaded_at).getTime() - new Date(a.uploaded_at).getTime()
+            new Date(b.uploaded_at).getTime() -
+            new Date(a.uploaded_at).getTime(),
         ),
         total: filesInfo.length,
       });
@@ -235,7 +237,8 @@ export function createServer() {
         destination: "/cc1_transcriptions",
       };
 
-      const destination = (tenantConfig.destination || "/cc1_transcriptions") as string;
+      const destination = (tenantConfig.destination ||
+        "/cc1_transcriptions") as string;
       const vttFile = path.join(destination, `${baseName}.vtt`);
 
       res.sendFile(vttFile);
@@ -254,7 +257,8 @@ export function createServer() {
         destination: "/cc1_transcriptions",
       };
 
-      const destination = (tenantConfig.destination || "/cc1_transcriptions") as string;
+      const destination = (tenantConfig.destination ||
+        "/cc1_transcriptions") as string;
       const jsonFile = path.join(destination, `${baseName}.json`);
 
       const data = await fs.readFile(jsonFile, "utf-8");

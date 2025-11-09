@@ -15,7 +15,10 @@ interface FilesListProps {
   onFileSelect: (baseName: string, fileName: string) => void;
 }
 
-export default function FilesList({ tenantName, onFileSelect }: FilesListProps) {
+export default function FilesList({
+  tenantName,
+  onFileSelect,
+}: FilesListProps) {
   const [files, setFiles] = useState<FileInfo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,8 +75,13 @@ export default function FilesList({ tenantName, onFileSelect }: FilesListProps) 
   if (files.length === 0) {
     return (
       <div className="text-center py-12">
-        <FileAudio size={48} className="mx-auto text-muted-foreground mb-4 opacity-30" />
-        <p className="text-muted-foreground mb-2">No audio files uploaded yet</p>
+        <FileAudio
+          size={48}
+          className="mx-auto text-muted-foreground mb-4 opacity-30"
+        />
+        <p className="text-muted-foreground mb-2">
+          No audio files uploaded yet
+        </p>
         <p className="text-sm text-muted-foreground">
           Upload files above to get started
         </p>

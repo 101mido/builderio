@@ -71,9 +71,7 @@ export default function TenantSelector({
   };
 
   if (isLoading) {
-    return (
-      <div className="h-12 bg-muted rounded-lg animate-pulse" />
-    );
+    return <div className="h-12 bg-muted rounded-lg animate-pulse" />;
   }
 
   return (

@@ -47,15 +47,13 @@ export default function Index() {
   const [source, setSource] = useState("/cc1_recordings");
   const [destination, setDestination] = useState("/cc1_transcriptions");
   const [apiEndpoint, setApiEndpoint] = useState("");
-  const [webhooks, setWebhooks] = useState<Webhook[]>([
-    { index: 0, url: "" },
-  ]);
+  const [webhooks, setWebhooks] = useState<Webhook[]>([{ index: 0, url: "" }]);
   const [metrics, setMetrics] = useState<ScoringMetric[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState<
-    | { type: "idle" | "success" | "error"; message: string }
-    | null
-  >(null);
+  const [uploadStatus, setUploadStatus] = useState<{
+    type: "idle" | "success" | "error";
+    message: string;
+  } | null>(null);
   const [nextWebhookIndex, setNextWebhookIndex] = useState(1);
 
   // File details modal state
@@ -81,14 +79,14 @@ export default function Index() {
       setWebhooks(
         config.webhooks && config.webhooks.length > 0
           ? config.webhooks
-          : [{ index: 0, url: "" }]
+          : [{ index: 0, url: "" }],
       );
       setMetrics(config.metrics || []);
 
       if (config.webhooks) {
         const maxIndex = Math.max(
           ...config.webhooks.map((w: { index: number }) => w.index),
-          0
+          0,
         );
         setNextWebhookIndex(maxIndex + 1);
       }
@@ -121,7 +119,9 @@ export default function Index() {
   };
 
   const handleWebhookChange = (index: number, value: string) => {
-    setWebhooks(webhooks.map((w) => (w.index === index ? { ...w, url: value } : w)));
+    setWebhooks(
+      webhooks.map((w) => (w.index === index ? { ...w, url: value } : w)),
+    );
   };
 
   const handleWebhookRemove = (index: number) => {
@@ -215,7 +215,9 @@ export default function Index() {
       setUploadStatus({
         type: "error",
         message:
-          error instanceof Error ? error.message : "An error occurred during upload",
+          error instanceof Error
+            ? error.message
+            : "An error occurred during upload",
       });
     } finally {
       setIsLoading(false);
@@ -250,8 +252,8 @@ export default function Index() {
             </h1>
           </div>
           <p className="text-lg text-muted-foreground max-w-2xl">
-            Upload and process audio files with custom scoring metrics. Configure your
-            paths, webhooks, and evaluation criteria.
+            Upload and process audio files with custom scoring metrics.
+            Configure your paths, webhooks, and evaluation criteria.
           </p>
         </div>
 
@@ -349,9 +351,11 @@ export default function Index() {
         {/* Footer Info */}
         <div className="mt-16 pt-8 border-t border-border">
           <p className="text-sm text-muted-foreground text-center">
-            This application sends your configuration and files to the local API for processing.
+            This application sends your configuration and files to the local API
+            for processing.
             <br />
-            All data will be handled according to your API's configured settings.
+            All data will be handled according to your API's configured
+            settings.
           </p>
         </div>
       </div>

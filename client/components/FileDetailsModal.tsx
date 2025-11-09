@@ -24,9 +24,9 @@ export default function FileDetailsModal({
   const [jsonData, setJsonData] = useState<AnalysisData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"audio" | "transcription" | "analysis">(
-    "audio"
-  );
+  const [activeTab, setActiveTab] = useState<
+    "audio" | "transcription" | "analysis"
+  >("audio");
 
   useEffect(() => {
     if (isOpen) {
@@ -42,7 +42,7 @@ export default function FileDetailsModal({
       // Load VTT file
       try {
         const vttResponse = await fetch(
-          `/api/files/${baseName}/vtt?tenant_name=${tenantName}`
+          `/api/files/${baseName}/vtt?tenant_name=${tenantName}`,
         );
         if (vttResponse.ok) {
           const vttText = await vttResponse.text();
@@ -55,7 +55,7 @@ export default function FileDetailsModal({
       // Load JSON analysis
       try {
         const jsonResponse = await fetch(
-          `/api/files/${baseName}/json?tenant_name=${tenantName}`
+          `/api/files/${baseName}/json?tenant_name=${tenantName}`,
         );
         if (jsonResponse.ok) {
           const jsonContent = await jsonResponse.json();
@@ -81,7 +81,9 @@ export default function FileDetailsModal({
         <div className="flex items-center justify-between p-6 border-b border-border">
           <div>
             <h2 className="text-2xl font-bold text-foreground">{fileName}</h2>
-            <p className="text-sm text-muted-foreground mt-1">Base: {baseName}</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              Base: {baseName}
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -167,7 +169,9 @@ export default function FileDetailsModal({
                   <div className="space-y-2 text-sm">
                     {typeof jsonData.total_score === "number" && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Total Score:</span>
+                        <span className="text-muted-foreground">
+                          Total Score:
+                        </span>
                         <span className="font-semibold text-foreground">
                           {jsonData.total_score}
                         </span>
@@ -175,7 +179,9 @@ export default function FileDetailsModal({
                     )}
                     {typeof jsonData.total_score_percentage === "number" && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Score Percentage:</span>
+                        <span className="text-muted-foreground">
+                          Score Percentage:
+                        </span>
                         <span className="font-semibold text-foreground">
                           {jsonData.total_score_percentage.toFixed(1)}%
                         </span>
@@ -228,13 +234,7 @@ export default function FileDetailsModal({
   );
 }
 
-function AnalysisSection({
-  title,
-  data,
-}: {
-  title: string;
-  data: unknown;
-}) {
+function AnalysisSection({ title, data }: { title: string; data: unknown }) {
   const [isExpanded, setIsExpanded] = useState(true);
 
   if (data === null || data === undefined) return null;
@@ -245,9 +245,7 @@ function AnalysisSection({
   }
 
   const formatTitle = (str: string) =>
-    str
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (l) => l.toUpperCase());
+    str.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
   if (typeof data === "object" && !Array.isArray(data)) {
     const obj = data as Record<string, unknown>;
@@ -258,8 +256,12 @@ function AnalysisSection({
           className="w-full p-4 flex items-center justify-between bg-secondary bg-opacity-30 hover:bg-opacity-50 transition-colors"
           type="button"
         >
-          <h4 className="font-semibold text-foreground">{formatTitle(title)}</h4>
-          <span className={`transform transition-transform ${isExpanded ? "rotate-180" : ""}`}>
+          <h4 className="font-semibold text-foreground">
+            {formatTitle(title)}
+          </h4>
+          <span
+            className={`transform transition-transform ${isExpanded ? "rotate-180" : ""}`}
+          >
             ▼
           </span>
         </button>
@@ -271,7 +273,9 @@ function AnalysisSection({
                   {formatTitle(key)}
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  {typeof value === "string" ? value : JSON.stringify(value, null, 2)}
+                  {typeof value === "string"
+                    ? value
+                    : JSON.stringify(value, null, 2)}
                 </div>
               </div>
             ))}
@@ -292,7 +296,9 @@ function AnalysisSection({
           <h4 className="font-semibold text-foreground">
             {formatTitle(title)} ({data.length})
           </h4>
-          <span className={`transform transition-transform ${isExpanded ? "rotate-180" : ""}`}>
+          <span
+            className={`transform transition-transform ${isExpanded ? "rotate-180" : ""}`}
+          >
             ▼
           </span>
         </button>
@@ -320,7 +326,9 @@ function AnalysisSection({
 
   return (
     <div className="p-4 bg-secondary bg-opacity-30 rounded-lg border border-border">
-      <h4 className="font-semibold text-foreground mb-2">{formatTitle(title)}</h4>
+      <h4 className="font-semibold text-foreground mb-2">
+        {formatTitle(title)}
+      </h4>
       <p className="text-sm text-muted-foreground">{String(data)}</p>
     </div>
   );
