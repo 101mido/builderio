@@ -4,6 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "python backend/run.py",
+    "setup:python": "bash setup-python.sh",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest --run",
