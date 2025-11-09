@@ -24,6 +24,14 @@ export default function TenantSelector({
   const loadTenants = async () => {
     try {
       const response = await fetch("/api/tenants");
+
+      if (!response.ok) {
+        console.error("Failed to load tenants:", response.status);
+        setTenants(["default"]);
+        setIsLoading(false);
+        return;
+      }
+
       const data = await response.json();
       const tenantList = Object.keys(data);
       setTenants(tenantList.length > 0 ? tenantList : ["default"]);
