@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fusion-starter
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - PING_MESSAGE=${PING_MESSAGE:-ping}
+    volumes:
+      # Persist application data
+      - ./data:/app/data
+      # Mount audio directories (adjust paths as needed)
+      - /path/to/audio/recordings:/cc1_recordings
+      - /path/to/transcriptions:/cc1_transcriptions
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: fusion-starter-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro  # For SSL certificates
+    depends_on:
+      - app
+    profiles:
+      - with-nginx
+
+networks:
+  default:
+    name: fusion-starter-network
